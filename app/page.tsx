@@ -33,8 +33,8 @@ const projects = [
 export default function Home() {
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [visibleSections, setVisibleSections] = useState<Set<number>>(new Set());
   const [isClient, setIsClient] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -49,22 +49,26 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (!isClient) return;
+    
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const index = Array.from(document.querySelectorAll('.fade-in-section')).indexOf(entry.target as Element);
-          setVisibleSections((prev) => new Set([...prev, index]));
+          (entry.target as HTMLElement).classList.add('visible');
         }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in-section').forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [isClient]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>
-      {isClient && (
       <div className="bg-white text-gray-900 overflow-x-hidden">
         {/* Navigation */}
         <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -77,15 +81,52 @@ export default function Home() {
               <a href="#about" className="hover:text-black transition-colors">About</a>
               <a href="#contact" className="hover:text-black transition-colors">Contact</a>
             </div>
-            <button className="md:hidden">
-              <Menu className="w-5 h-5" />
+            <button 
+              className="md:hidden p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
+          
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-white border-b border-gray-100">
+              <div className="px-6 py-4 space-y-3">
+                <a 
+                  href="#work" 
+                  className="mobile-menu-item block text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Work
+                </a>
+                <a 
+                  href="#about" 
+                  className="mobile-menu-item block text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  About
+                </a>
+                <a 
+                  href="#contact" 
+                  className="mobile-menu-item block text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
+                </a>
+              </div>
+            </div>
+          )}
         </nav>
 
         {/* Hero Section */}
-        <section className="pt-48 pb-32 px-6 max-w-6xl mx-auto">
-          <h1 className="hero-text text-5xl md:text-8xl font-bold mb-10">
+        <section className="pt-32 pb-32 px-6 max-w-6xl mx-auto">
+          <h1 className="hero-text text-5xl md:text-8xl font-bold mb-10 mt-16">
             <span className="reveal-container">
               <span className="reveal-text reveal-delay-1 block">Bridge the Gap.</span>
             </span>
@@ -106,9 +147,7 @@ export default function Home() {
             {projects.map((project, index) => (
               <div
                 key={index}
-                className={`project-card group cursor-pointer fade-in-section ${
-                  visibleSections.has(index) ? 'visible' : ''
-                } ${index === 2 ? 'md:col-span-2' : ''}`}
+                className={`project-card group cursor-pointer fade-in-section ${index === 2 ? 'md:col-span-2' : ''}`}
                 onClick={() => setSelectedProject(index)}
               >
                 <div className="aspect-video bg-gray-200 flex items-center justify-center relative overflow-hidden">
@@ -235,7 +274,6 @@ export default function Home() {
           </div>
         )}
       </div>
-      )}
     </>
   );
 }
