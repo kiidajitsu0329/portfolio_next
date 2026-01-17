@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import type { Project } from './types';
 import { NAV_LINKS, CLASS_NAMES, ANIMATION } from './constants';
@@ -10,65 +11,73 @@ const projects: Project[] = [
   {
     title: "Semiconductor Analysis App",
     category: "Backend / Data Analysis",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200",
-    description: "複雑なデータ分析を行うアプリケーション開発。FastAPIによる高速なAPI実装と、Celery + Redisを用いた非同期タスク管理により、効率的な処理を実現。",
-    detail: "基本設計からテストまでを担当。pydanticを用いた厳格なデータバリデーションや、フロントエンドでの動的なグラフ描画・CSVエクスポート機能を実装。複数の処理を並行実行し、システムの応答性を大幅に改善しました。",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "分析アプリの基盤設計",
+    description: "半導体分析アプリのAPIと非同期処理を実装。FastAPIとCelery + Redisを用いたデータ処理基盤を構築。",
+    detail: "API開発、非同期タスク管理、pydanticによるバリデーション、エラーハンドリングを担当。フロントではグラフ表示やCSVエクスポート、ダウンロード機能を実装し、バックエンドではPlay FrameworkでのREST API実装にも対応しました。",
     tech: ["Python", "FastAPI", "Celery / Redis", "PostgreSQL", "Azure Storage", "JavaScript"]
   },
   {
     title: "Education Management System",
     category: "Full Stack Development",
-    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200",
-    description: "教育機関向け管理システムのサーバサイドおよびUI開発。ASP.NETを中心に、CSVデータの自動登録機能や非同期通信処理を実装。",
-    detail: "要件定義からDB設計、テストまで一貫して対応。jQueryを用いた直感的なUI制御により、PC操作に不慣れなユーザーでもミスなく作業できるインターフェースを構築。事務作業の効率化により業務時間を30%削減しました。",
+    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "申請業務のオンライン化",
+    description: "教育機関向け申請管理システムのサーバサイドとUIを実装。ASP.NETを中心に、CSV登録や非同期通信を組み込み。",
+    detail: "要件定義からDB設計、テストまで一貫して対応。jQueryによるUI制御で入力ミスを減らし、事務作業の効率化に寄与しました。",
     tech: ["C#", "ASP.NET", "jQuery / AJAX", "PostgreSQL", "JavaScript", "HTML/CSS"]
   },
   {
     title: "Official Government Portal Development",
     category: "Frontend / UX Optimization",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "官公庁サイトのUX改善",
     description: "官公庁向けポータルサイトの顧客折衝から一貫対応。WordPressカスタマイズにより情報検索機能と管理機能を実装。",
-    detail: "Figmaを用いた画面改善提案を実施し、現場課題を踏まえたデザイン修正を推進。AWS S3を利用した静的サイトのデプロイおよび運用サポートを担当。ユーザー満足度が大幅に向上しました。",
+    detail: "Figmaを用いた画面改善提案を実施し、現場課題を踏まえたデザイン修正を推進。AWS S3を利用した静的サイトのデプロイおよび運用サポートを担当しました。",
     tech: ["WordPress", "JavaScript", "PHP", "HTML/CSS", "AWS S3", "Figma"]
   },
   {
     title: "EC Site UI/UX Enhancement",
     category: "Frontend Development",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200",
-    description: "家具ECサイトのUI/UX改善プロジェクト。ユーザー導線の最適化により売上向上を実現。",
-    detail: "UI/UX改善、HTML/CSSコーディングに加え、JavaScriptによる機能拡張を担当。ページ遷移の最適化とCTA配置の改善により、コンバージョン率を25%向上させました。",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "導線設計の改善",
+    description: "家具ECサイトのUI/UX改善プロジェクト。ユーザー導線の見直しと表示設計を担当。",
+    detail: "UI/UX改善、HTML/CSSコーディング、JavaScriptによる機能拡張を担当。ページ遷移やCTA配置の改善に取り組みました。",
     tech: ["JavaScript", "PHP", "HTML/CSS", "jQuery", "MySQL"]
   },
   {
     title: "Agile Transformation & Communication",
     category: "Process Improvement / Team Leadership",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200",
-    description: "アジャイル開発チームのコミュニケーション改善とプロセス最適化。進捗可視化ツール導入による生産性向上。",
-    detail: "進捗状況をグラフ化してデイリー共有する習慣を導入。オープンな発言環境を構築することで、チーム間のコミュニケーションが円滑化。プロジェクト全体の生産性が20%向上し、短期リリースサイクルの実現に貢献しました。",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "進捗の見える化推進",
+    description: "アジャイル開発チームのコミュニケーション改善とプロセス最適化に取り組み。",
+    detail: "進捗状況をグラフ化してデイリー共有する習慣を導入。オープンな発言環境づくりを通じて、チーム内の情報共有を促進しました。",
     tech: ["Agile/Scrum", "Communication Tools", "Data Visualization", "Team Leadership"]
   },
   {
     title: "Multi-Industry System Solutions",
     category: "Full Cycle Development",
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200",
-    description: "不動産・飲食・レジャー等、多様な業界向けシステム開発。それぞれの業界要件に応じた最適なソリューション提供。",
-    detail: "配車業務管理システム、物件管理システム、各種コーポレートサイト構築など、単月～3ヶ月規模の複数案件を同時進行で対応。業界ごとの品質基準を理解し、短納期でも品質を担保する制作体制を構築しました。",
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "多業界の短期案件対応",
+    description: "不動産・飲食・レジャーなど多様な業界向けのWeb/業務システムを担当。",
+    detail: "配車業務管理、物件検索、各種コーポレートサイト構築など複数案件を並行対応。業界要件を踏まえた設計と実装を行いました。",
     tech: ["WordPress", "PHP", "MySQL", "JavaScript", "HTML/CSS", "Vue.js"]
   },
   {
     title: "Career Counseling & Process Improvement",
     category: "Career Development / Requirements Gathering",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200",
-    description: "人材派遣業でのキャリアカウンセリングと業務改善。スタッフのニーズ理解と最適配置を実現。",
-    detail: "派遣スタッフのキャリアカウンセリング、契約書作成、研修サポートを担当。ユーザーの潜在的なニーズを引き出す力を磨きました。業務改善提案も採用され、効率化を推進。この経験が、システム開発での要件定義の強みに繋がっています。",
+    image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "潜在ニーズを言語化",
+    description: "人材派遣業でのキャリアカウンセリングと業務改善。スタッフのニーズ理解と最適配置に対応。",
+    detail: "派遣スタッフのキャリアカウンセリング、契約書作成、研修サポートを担当。潜在的なニーズを引き出す力を磨きました。",
     tech: ["Career Planning", "Requirement Analysis", "Process Optimization", "Communication"]
   },
   {
-    title: "Inventory & Schedule Management",
+    title: "Customer Experience & Service Excellence",
     category: "Operations / Data Organization",
-    image: "https://images.unsplash.com/photo-1554224311-beee415c201f?auto=format&fit=crop&q=80&w=1200",
-    description: "レンタカー業での在庫・スケジュール管理。複数条件の調整と顧客対応。",
-    detail: "車両在庫、リアルタイムスケジュール管理、顧客対応、店舗事務を一体的に処理。複数の制約条件を満たしながら最適な配置を実現する思考力を習得。この経験が、複雑なデータ処理・ロジック実装への適応力に繋がっています。",
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=1200&fm=webp",
+    summary: "顧客ニーズを深く理解する接客",
+    description: "レンタカー業での在庫・スケジュール管理と顧客対応。",
+    detail: "車両在庫、リアルタイムスケジュール管理、顧客対応、店舗事務を一体的に処理。複数条件を調整する現場運用の経験を積みました。",
     tech: ["Inventory Management", "Schedule Planning", "Customer Service", "Data Organization"]
   }
 ];
@@ -77,7 +86,6 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // スクロール処理（throttle 適用）
   useEffect(() => {
@@ -91,6 +99,14 @@ export default function Home() {
 
   // IntersectionObserver（マウント時のみ実行）
   useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.fade-in-section'));
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      sections.forEach((section) => section.classList.add('visible'));
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -99,7 +115,7 @@ export default function Home() {
       });
     }, { threshold: ANIMATION.SCROLL_THRESHOLD });
 
-    document.querySelectorAll('.fade-in-section').forEach((section) => observer.observe(section));
+    sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
 
@@ -117,6 +133,18 @@ export default function Home() {
     return () => document.removeEventListener('keydown', handleEscapeKey);
   }, [selectedProject]);
 
+  // モーダル表示時のスクロール制御
+  useEffect(() => {
+    if (selectedProject === null) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [selectedProject]);
+
   // モーバイルメニューを開く/閉じる
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -130,13 +158,11 @@ export default function Home() {
   // プロジェクトを開く
   const openProject = useCallback((index: number) => {
     setSelectedProject(index);
-    document.body.style.overflow = 'hidden'; // スクロール禁止
   }, []);
 
   // モーダルを閉じる
   const closeModal = useCallback(() => {
     setSelectedProject(null);
-    document.body.style.overflow = '';  // スクロール復帰
   }, []);
 
   return (
@@ -172,7 +198,7 @@ export default function Home() {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden bg-white border-b border-gray-100">
-              <nav className="px-6 py-4 space-y-3">
+              <div className="px-6 py-4 space-y-3">
                 {NAV_LINKS.map((link) => (
                   <a 
                     key={link.href}
@@ -183,7 +209,7 @@ export default function Home() {
                     {link.label}
                   </a>
                 ))}
-              </nav>
+              </div>
             </div>
           )}
         </nav>
@@ -200,7 +226,7 @@ export default function Home() {
           </h1>
           <div className="reveal-container">
             <p className="reveal-text reveal-delay-3 text-xl md:text-2xl text-gray-500 max-w-2xl font-light leading-relaxed">
-              顧客折衝から一貫して担うフルサイクルエンジニア。技術・デザイン・業務をつなぎ、複雑な課題に対する「最適解」を構築します。
+              「顧客満足」と「チームの幸福」を実装する、フルサイクルエンジニア。
             </p>
           </div>
         </section>
@@ -223,10 +249,12 @@ export default function Home() {
                 tabIndex={0}
               >
                 <div className="aspect-video bg-gray-200 flex items-center justify-center relative overflow-hidden">
-                  <img
+                  <Image
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
                   />
                   <div className="absolute bottom-8 left-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="px-4 py-2 bg-black/40 backdrop-blur-xl rounded-full text-xs font-medium">
@@ -236,7 +264,7 @@ export default function Home() {
                 </div>
                 <div className="p-10">
                   <h3 className="text-2xl font-semibold mb-3">{project.title}</h3>
-                  <p className="text-gray-500 font-light leading-relaxed">{project.description}</p>
+                  <p className="text-gray-500 font-light leading-relaxed">{project.summary}</p>
                 </div>
               </article>
             ))}
@@ -251,12 +279,20 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {/* Full Stack Development */}
               <div className="fade-in-section">
+                <Image
+                  src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&q=80&w=1200&fm=webp"
+                  alt="Full cycle development"
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="w-full aspect-[4/3] object-cover rounded-2xl mb-6"
+                />
                 <h3 className="text-xl font-bold mb-6 flex items-center">
                   <span className="w-2 h-2 bg-black rounded-full mr-3"></span>
                   Full Cycle Development
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed mb-4">
-                  顧客折衝から、システムライフサイクル全般を統括。バックエンド・フロントエンド双方で実装経験を持ち、複雑な課題にも柔軟に対応できます。
+                  顧客折衝から開発・運用までの一連を担当。バックエンド・フロントエンド双方で実装経験があります。
                 </p>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>• 要件定義・基本設計</li>
@@ -267,12 +303,20 @@ export default function Home() {
 
               {/* Backend Development */}
               <div className="fade-in-section">
+                <Image
+                  src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&q=80&w=1200&fm=webp"
+                  alt="Backend development"
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="w-full aspect-[4/3] object-cover rounded-2xl mb-6"
+                />
                 <h3 className="text-xl font-bold mb-6 flex items-center">
                   <span className="w-2 h-2 bg-black rounded-full mr-3"></span>
                   Backend Development
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed mb-4">
-                  FastAPI、ASP.NET等での高負荷データ処理実装。非同期処理・キャッシング・キューイングなど、安定稼働を重視した堅牢な設計が得意です。
+                  FastAPI、ASP.NET等でのデータ処理実装経験。非同期処理やキューイングを用いた設計にも対応します。
                 </p>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>• Python / FastAPI</li>
@@ -283,12 +327,20 @@ export default function Home() {
 
               {/* Frontend & UX */}
               <div className="fade-in-section">
+                <Image
+                  src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?auto=format&fit=crop&q=80&w=1200&fm=webp"
+                  alt="Frontend and UX design"
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="w-full aspect-[4/3] object-cover rounded-2xl mb-6"
+                />
                 <h3 className="text-xl font-bold mb-6 flex items-center">
                   <span className="w-2 h-2 bg-black rounded-full mr-3"></span>
                   Frontend & UX
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed mb-4">
-                  UI制御・画面描画からユーザー導線の改善まで対応。Figmaでの提案も含め、"使いやすさ"を意識した開発が可能です。
+                  UI制御・画面描画から導線改善まで対応。Figmaでの提案も行います。
                 </p>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>• Next.js / TypeScript</li>
@@ -299,12 +351,20 @@ export default function Home() {
 
               {/* Agile & Team */}
               <div className="fade-in-section">
+                <Image
+                  src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&q=80&w=1200&fm=webp"
+                  alt="Agile team collaboration"
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="w-full aspect-[4/3] object-cover rounded-2xl mb-6"
+                />
                 <h3 className="text-xl font-bold mb-6 flex items-center">
                   <span className="w-2 h-2 bg-black rounded-full mr-3"></span>
                   Agile & Communication
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed mb-4">
-                  スクラムでの短期リリース対応。進捗可視化やコミュニケーション改善により、チーム全体のパフォーマンス向上に貢献。
+                  スクラムでの短期リリース対応。進捗可視化やコミュニケーション改善に取り組みました。
                 </p>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>• Agile / Scrum</li>
@@ -315,28 +375,44 @@ export default function Home() {
 
               {/* Multi-Industry */}
               <div className="fade-in-section">
+                <Image
+                  src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&q=80&w=1200&fm=webp"
+                  alt="Multi-industry experience"
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="w-full aspect-[4/3] object-cover rounded-2xl mb-6"
+                />
                 <h3 className="text-xl font-bold mb-6 flex items-center">
                   <span className="w-2 h-2 bg-black rounded-full mr-3"></span>
                   Multi-Industry Experience
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed mb-4">
-                  半導体・官公庁・教育・EC・不動産など、多様な業界要件に適応。業界固有の品質基準を理解し、実現可能な提案が可能です。
+                  半導体・官公庁・教育・EC・不動産など、多様な業界要件に対応してきました。
                 </p>
                 <ul className="space-y-2 text-sm text-gray-600">
-                  <li>• 7業界以上の実績</li>
                   <li>• 業務理解に基づく提案</li>
-                  <li>• 短納期での品質担保</li>
+                  <li>• 複数案件の同時進行に対応</li>
+                  <li>• 業界要件に沿った実装</li>
                 </ul>
               </div>
 
               {/* Technical Skills */}
               <div className="fade-in-section">
+                <Image
+                  src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200&fm=webp"
+                  alt="Technical stack"
+                  width={1200}
+                  height={900}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="w-full aspect-[4/3] object-cover rounded-2xl mb-6"
+                />
                 <h3 className="text-xl font-bold mb-6 flex items-center">
                   <span className="w-2 h-2 bg-black rounded-full mr-3"></span>
                   Technical Stack
                 </h3>
                 <p className="text-gray-600 font-light leading-relaxed mb-4">
-                  幅広い技術スタックに対応。新しい技術への学習力も高く、プロジェクト要件に応じた最適な技術選定ができます。
+                  幅広い技術スタックに対応。プロジェクト要件に応じた技術選定に取り組みます。
                 </p>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li>• Python / Java / C#</li>
@@ -422,7 +498,7 @@ export default function Home() {
             
             <div className="prose prose-lg max-w-none fade-in-section">
               <p className="text-xl text-gray-700 leading-relaxed mb-8 font-light">
-                Web/オープン系システムエンジニアとして、顧客折衝から一貫して対応可能なフルサイクル開発を強みとしています。半導体分析アプリ、官公庁ポータル、ECサイトなど多様な業界に従事し、バックエンド・フロントエンド双方で高品質なシステムを安定稼働させてきました。
+                Web/オープン系システムエンジニアとして、顧客折衝から一貫して対応できるフルサイクル開発に携わってきました。半導体分析アプリ、官公庁ポータル、ECサイトなど多様な業界で、バックエンド・フロントエンドの実装を経験しています。
               </p>
 
               <h3 className="text-2xl font-bold mb-6 mt-12">主な強み</h3>
@@ -430,7 +506,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div className="border-l-4 border-black pl-6">
                   <h4 className="font-bold text-lg mb-3">要件定義～運用まで一貫対応</h4>
-                  <p className="text-gray-600">仕様検討から実装・改善まで一貫して対応し、工程間の齟齬を最小化。複雑なシステムを安定稼働させた実績があります。</p>
+                  <p className="text-gray-600">仕様検討から実装・改善まで一貫して対応し、工程間の齟齬を最小化します。</p>
                 </div>
 
                 <div className="border-l-4 border-black pl-6">
@@ -440,17 +516,17 @@ export default function Home() {
 
                 <div className="border-l-4 border-black pl-6">
                   <h4 className="font-bold text-lg mb-3">ユーザー視点のUI開発</h4>
-                  <p className="text-gray-600">UI制御・画面描画からユーザー導線の改善まで対応。"使いやすさ"を意識した開発により、ユーザー満足度と販売促進に貢献。</p>
+                  <p className="text-gray-600">UI制御・画面描画からユーザー導線の改善まで対応。"使いやすさ"を意識した開発に取り組みます。</p>
                 </div>
 
                 <div className="border-l-4 border-black pl-6">
                   <h4 className="font-bold text-lg mb-3">チーム生産性向上への貢献</h4>
-                  <p className="text-gray-600">進捗可視化・情報共有の改善により、メンバー間のコミュニケーションを円滑化。プロジェクト全体の生産性を向上させました。</p>
+                  <p className="text-gray-600">進捗可視化・情報共有の改善により、メンバー間のコミュニケーションを円滑化します。</p>
                 </div>
 
                 <div className="border-l-4 border-black pl-6">
                   <h4 className="font-bold text-lg mb-3">多業界への適応力</h4>
-                  <p className="text-gray-600">半導体・官公庁・教育・EC・不動産など、異なる品質基準と要件を持つ案件で成果を上げてきました。</p>
+                  <p className="text-gray-600">半導体・官公庁・教育・EC・不動産など、異なる品質基準と要件を持つ案件に対応してきました。</p>
                 </div>
 
                 <div className="border-l-4 border-black pl-6">
@@ -497,10 +573,10 @@ export default function Home() {
         {/* Beyond Coding Section */}
         <section id="approach" className="py-40 px-6 bg-[#fbfbfd]">
           <div className="max-w-4xl mx-auto text-center fade-in-section">
-            <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">Beyond Coding.</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">課題解決のパートナー</h2>
             <p className="text-xl text-gray-500 leading-relaxed font-light mb-16">
-              システム開発はコードを書くだけではありません。チームの進捗可視化、コミュニケーションの円滑化、そしてビジネス要件の深い理解。<br className="hidden md:block" />
-              アジャイルとウォーターフォール双方の経験を活かし、安定稼働と生産性向上の両立を実現します。
+              コーディングが自動化される時代に重要なのは、ITとコミュニケーションの両面から課題をほどく力です。<br className="hidden md:block" />
+              要件の整理、合意形成、実行まで伴走し、現場に定着する解決策をつくります。
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
@@ -575,10 +651,12 @@ export default function Home() {
               </button>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full md:w-1/2 h-72 md:h-auto relative bg-gray-100">
-                  <img
+                  <Image
                     src={projects[selectedProject].image}
                     alt={projects[selectedProject].title}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
                   />
                 </div>
                 <div className="w-full md:w-1/2 p-10 md:p-16">
