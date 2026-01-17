@@ -203,6 +203,37 @@ export default function Home() {
               顧客折衝から一貫して担うフルサイクルエンジニア。技術・デザイン・業務をつなぎ、複雑な課題に対する「最適解」を構築します。
             </p>
           </div>
+          <div className="hero-scene mt-14" aria-hidden="true">
+            <div className="hero-ground"></div>
+            <div className="hero-figure hero-figure--thinker">
+              <span className="hero-head"></span>
+              <span className="hero-body"></span>
+              <span className="hero-arm hero-arm--left"></span>
+              <span className="hero-arm hero-arm--right"></span>
+              <span className="hero-leg hero-leg--left"></span>
+              <span className="hero-leg hero-leg--right"></span>
+            </div>
+            <div className="hero-figure hero-figure--runner">
+              <span className="hero-head"></span>
+              <span className="hero-body"></span>
+              <span className="hero-arm hero-arm--left"></span>
+              <span className="hero-arm hero-arm--right"></span>
+              <span className="hero-leg hero-leg--left"></span>
+              <span className="hero-leg hero-leg--right"></span>
+            </div>
+            <div className="hero-bubble">
+              <span className="hero-bubble-tail"></span>
+              <span className="hero-dot hero-dot--1"></span>
+              <span className="hero-dot hero-dot--2"></span>
+              <span className="hero-dot hero-dot--3"></span>
+            </div>
+            <div className="hero-lightbulb">
+              <span className="hero-lightbulb-bulb"></span>
+              <span className="hero-lightbulb-ray hero-lightbulb-ray--1"></span>
+              <span className="hero-lightbulb-ray hero-lightbulb-ray--2"></span>
+              <span className="hero-lightbulb-ray hero-lightbulb-ray--3"></span>
+            </div>
+          </div>
         </section>
 
         {/* Project Grid */}
