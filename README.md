@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ポートフォリオサイト（Next.js）
 
-## Getting Started
+フルサイクルエンジニアのポートフォリオサイトです。  
+設計意図が伝わる構成（データ/表示/副作用の分離）と、読みやすいコードを重視しています。
 
-First, run the development server:
+## 主な特徴
+- セクション構成をコンポーネント分割して可読性を確保
+- インタラクションはクライアント島に限定し、ページはサーバー中心
+- `next/image` による画像最適化
+- `prefers-reduced-motion` への配慮
 
+## 技術スタック
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+
+## セットアップ
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 開発サーバー起動
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+ブラウザで `http://localhost:3000` を開いて確認してください。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ディレクトリ構成（抜粋）
+```
+app/
+  components/   UIコンポーネント
+  data/         表示データ
+  hooks/        UI向けカスタムフック
+  page.tsx      ルートページ（サーバー中心）
+```
 
-## Learn More
+## 画像について
+外部画像は Unsplash を利用しています。  
+`next.config.ts` の `images.remotePatterns` を参照してください。
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 連絡先
+お問い合わせリンクの宛先は `app/components/ContactSection.tsx` の `mailto` で設定しています。  
+公開時は必要に応じて変更してください。
